@@ -45,6 +45,11 @@ export function years () {
   return years
 }
 
+export function months () {
+  console.log(moment.months())
+  return moment.months()
+}
+
 export function hours () {
   let hours = []
 

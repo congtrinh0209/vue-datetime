@@ -27,7 +27,7 @@
                                         <path fill="none" stroke="#444" stroke-width="14" stroke-miterlimit="10" d="M56.3 97.8L9.9 51.4 56.3 5"/>
                                     </svg>
                                 </div>
-                                <div class="vdatetime-popup__month-selector__current">{{ currentMonth }}</div>
+                                <div class="vdatetime-popup__month-selector__current" @click="showMonthPicker">{{ currentMonth }}</div>
                                 <div class="vdatetime-popup__month-selector__next" @click="nextMonth">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61.3 102.8">
                                         <path fill="none" stroke="#444" stroke-width="14" stroke-miterlimit="10" d="M56.3 97.8L9.9 51.4 56.3 5"/>
@@ -54,6 +54,11 @@
                                 <div class="vdatetime-popup__list-picker__item" v-for="year in years" @click="selectYear(year.number)" :class="{'vdatetime-popup__list-picker__item--selected': year.selected}">{{ year.number }}</div>
                             </div>
                         </div>
+                        <div v-show="show === 'month'" class="vdatetime-popup__list-picker-wrapper">
+                            <div class="vdatetime-popup__list-picker" ref="monthPicker">
+                                <div class="vdatetime-popup__list-picker__item" v-for="month in months" @click="selectMonth(month.name)" :class="{'vdatetime-popup__list-picker__item--selected': month.selected}">{{ month.name }}</div>
+                            </div>
+                        </div>                        
                     </div>
                     <div class="vdatetime-popup__actions">
                         <div class="vdatetime-popup__actions__button" @click="close(false)">{{ i18n.cancel }}</div>
@@ -136,6 +141,10 @@
             cancel: 'Cancel'
           }
         }
+      },
+      heightFixed: {
+        type: Boolean,
+        default: true
       }
     },
 
@@ -190,21 +199,28 @@
         const isCurrentMonth = currentYear === this.newDate.year() &&
                                currentMonth === this.newDate.month()
 
-        let days = util.monthDays(currentMonth, currentYear, this.mondayFirst)
-
-        return days.map(day => {
+        let days = util.monthDays(currentMonth, currentYear, this.mondayFirst, this.heightFixed)
+        let data = days.map(day => {
           return {
             number: day || '',
             selected: day ? isCurrentMonth && day === this.newDate.date() : false,
             disabled: day ? this.isDisabled(moment([currentYear, currentMonth, day])) : true
           }
         })
+        return data
       },
       years () {
         return util.years().map(year => {
           return {
             number: year,
             selected: year === this.newDate.year()
+          }
+        })
+      },
+      months () {
+        return util.months().map(monthname => {
+          return {
+            name: monthname 
           }
         })
       },
@@ -278,7 +294,7 @@
         this.isOpen = false
       },
       ok () {
-        if (this.show === 'year') {
+        if (this.show === 'year' || this.show === 'month') {
           this.showDatePicker()
         } else {
           this.typeFlow.ok()
@@ -302,6 +318,9 @@
           this.$refs.minutePicker.scrollTop = selectedMinute ? selectedMinute.offsetTop - 250 : 0
         })
       },
+      showMonthPicker () {
+        this.show = 'month'
+      },
       showYearPicker () {
         this.show = 'year'
 
@@ -320,6 +339,14 @@
       selectYear (year) {
         this.currentMonthDate = this.currentMonthDate.clone().year(year)
         this.newDate = this.newDate.clone().year(year)
+
+        if (this.autoContinue) {
+          this.showDatePicker()
+        }
+      },
+      selectMonth (monthName) {
+        this.currentMonthDate = this.currentMonthDate.clone().month(monthName)
+        this.newDate = this.newDate.clone().month(monthName)
 
         if (this.autoContinue) {
           this.showDatePicker()
@@ -404,7 +431,7 @@
 
     .vdatetime-popup__year {
         display: block;
-        font-weight: 300;
+        // font-weight: 300;
         font-size: 14px;
         opacity: 0.7;
         cursor: pointer;
