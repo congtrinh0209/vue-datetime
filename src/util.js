@@ -8,19 +8,30 @@ export function weekdays (momentLocale, mondayFirst = false) {
   return weekdays
 }
 
-export function monthDays (month, year, mondayFirst = false) {
+export function monthDays (month, year, mondayFirst = false, heightFixed = false) {
   const monthDate = moment([year, month, 1])
   let firstDay = monthDate.day() - (mondayFirst ? 1 : 0)
 
   if (firstDay === -1) {
     firstDay = 6
   }
-
-  let days = (new Array(monthDate.daysInMonth() + firstDay)).fill(null)
-
-  return days.map((value, index) => {
-    return index + 1 < firstDay ? null : index + 1 - firstDay
+  let num_of_days = monthDate.daysInMonth() + firstDay
+  let days = (new Array(heightFixed ? 35 : num_of_days)).fill(null)
+  let data = days.map((value, index) => {
+    if(heightFixed){
+      if(index >= num_of_days) {
+        return null
+      }
+      if(num_of_days > 35 && index < num_of_days - 35) {
+        return (35 + index + 1 - firstDay)
+      }
+    }
+    if(index + 1 >= firstDay){
+      return index + 1 - firstDay
+    }
+    return null
   })
+  return data
 }
 
 export function years () {
