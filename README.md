@@ -7,7 +7,7 @@
 
 ## Demo
 
-[![demo](https://raw.githubusercontent.com/mariomka/vue-datetime/master/docs/demo.gif)](http://mariomka.github.io/vue-datetime)
+[![demo](https://raw.githubusercontent.com/paritosh149/vue-datetime/c8d03c39eddd3c08c217b49b15fd86d90b3693eb/docs/vue-datetime-demo.gif)](http://mariomka.github.io/vue-datetime)
 
 **[Go to demo](https://paritosh149.github.io/vue-datetime/)**.
 
