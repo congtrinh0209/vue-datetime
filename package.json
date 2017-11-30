@@ -1,5 +1,5 @@
 {
-  "name": "vue-datetime",
+  "name": "vue-datetime-2",
   "version": "0.6.0",
   "description": "Mobile friendly datetime picker for Vue. Supports date, datetime and time modes, i18n and disabling dates.",
   "keywords": [
@@ -19,15 +19,15 @@
     "docs-watch": "webpack --progress --hide-modules --config docs/webpack.config.js --watch"
   },
   "author": {
-    "name": "Mario Juárez",
-    "email": "mario@mjp.one",
-    "url": "http://www.mjp.one"
+    "name": "Paritosh Mishra",
+    "email": "paritosh149@gmail.com",
+    "url": ""
   },
-  "repository": "mariomka/vue-datetime",
+  "repository": "paritosh149/vue-datetime",
   "bugs": {
-    "url": "https://github.com/mariomka/vue-datetime/issues"
+    "url": "https://github.com/paritosh149/vue-datetime/issues"
   },
-  "homepage": "https://github.com/mariomka/vue-datetime#readme",
+  "homepage": "https://github.com/paritosh149/vue-datetime#readme",
   "license": "MIT",
   "dependencies": {
     "moment": "^2.11.1"

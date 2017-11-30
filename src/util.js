@@ -46,7 +46,6 @@ export function years () {
 }
 
 export function months () {
-  console.log(moment.months())
   return moment.months()
 }
 

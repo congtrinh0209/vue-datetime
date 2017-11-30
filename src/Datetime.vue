@@ -17,6 +17,7 @@
                 <div class="vdatetime-popup">
                     <div class="vdatetime-popup__header">
                         <div class="vdatetime-popup__year" @click="showYearPicker">{{ newYear }}</div>
+                        <div class="vdatetime-popup__year" @click="showMonthPicker">{{ newMonth }}</div>
                         {{ newDay }}
                     </div>
                     <div class="vdatetime-popup__body" ref="popupBody">
@@ -27,7 +28,7 @@
                                         <path fill="none" stroke="#444" stroke-width="14" stroke-miterlimit="10" d="M56.3 97.8L9.9 51.4 56.3 5"/>
                                     </svg>
                                 </div>
-                                <div class="vdatetime-popup__month-selector__current" @click="showMonthPicker">{{ currentMonth }}</div>
+                                <div class="vdatetime-popup__month-selector__current">{{ currentMonth }}</div>
                                 <div class="vdatetime-popup__month-selector__next" @click="nextMonth">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 61.3 102.8">
                                         <path fill="none" stroke="#444" stroke-width="14" stroke-miterlimit="10" d="M56.3 97.8L9.9 51.4 56.3 5"/>
@@ -37,7 +38,13 @@
                             <div class="vdatetime-popup__date-picker" :style="{height: datePickerHeight}">
                                 <div class="vdatetime-popup__date-picker__item vdatetime-popup__date-picker__item--header" v-for="weekday in weekdays">{{ weekday }}</div>
                                 <div class="vdatetime-popup__date-picker__item" v-for="day in currentMonthDays" @click="!day.disabled && selectDay(day.number)" :class="{'vdatetime-popup__date-picker__item--selected': day.selected, 'vdatetime-popup__date-picker__item--disabled': day.disabled}">
-                                    <span><span>{{ day.number }}</span></span>
+                                    <span>
+                                      <span>{{ day.number }}</span>
+                                      <div v-if="day.number" style="font-size: 12px;">
+                                        <div style="border-radius: 50%; height:6px; width: 6px; position: absolute; top: 35px; left: 15px" :class="{'vdatetime-slot__available': day.am.available, 'vdatetime-slot__not-available': !day.am.available}">&nbsp;</div>
+                                        <div style="border-radius: 50%; height:6px; width: 6px; position: absolute; top: 35px; left: 24px"  :class="{'vdatetime-slot__available': day.pm.available, 'vdatetime-slot__not-available': !day.pm.available}">&nbsp;</div>
+                                      </div>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -78,6 +85,10 @@
 
   export default {
     props: {
+      opendialog: {
+        type: Boolean,
+        default: false
+      },
       value: {
         type: String,
         required: true
@@ -177,6 +188,13 @@
       }
     },
 
+    mounted () {
+      if (this.opendialog) {
+        this.opendialog = false
+        this.open()
+      }
+    },
+
     computed: {
       inputValue () {
         return this.typeFlow.format(this.date, this.inputFormat || this.typeFlow.inputFormat())
@@ -186,6 +204,9 @@
       },
       newYear () {
         return this.newDate.format('YYYY')
+      },
+      newMonth () {
+        return this.newDate.format('MMMM')
       },
       currentMonth () {
         return this.currentMonthDate.format('MMMM YYYY')
@@ -204,7 +225,13 @@
           return {
             number: day || '',
             selected: day ? isCurrentMonth && day === this.newDate.date() : false,
-            disabled: day ? this.isDisabled(moment([currentYear, currentMonth, day])) : true
+            disabled: day ? this.isDisabled(moment([currentYear, currentMonth, day])) : true,
+            am: {
+              available: Math.floor((Math.random() * 10000) + 1) % 3 === 0
+            },
+            pm: {
+              available: Math.floor((Math.random() * 10000) + 1) % 4 === 0
+            }
           }
         })
         return data
@@ -220,7 +247,8 @@
       months () {
         return util.months().map(monthname => {
           return {
-            name: monthname 
+            name: monthname,
+            selected: moment().month(monthname).isSame(this.newDate, 'month')
           }
         })
       },
@@ -320,7 +348,11 @@
       },
       showMonthPicker () {
         this.show = 'month'
-      },
+        this.$nextTick(() => {
+          let selectedMonth = this.$refs.monthPicker.querySelector('.vdatetime-popup__list-picker__item--selected')
+
+          this.$refs.monthPicker.scrollTop = selectedMonth ? selectedMonth.offsetTop - 250 : 0
+        })      },
       showYearPicker () {
         this.show = 'year'
 
@@ -500,7 +532,7 @@
         width: #{100%/7};
         line-height: 36px;
         text-align: center;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 300;
         cursor: pointer;
 
@@ -619,5 +651,14 @@
         &:hover {
             color: #444;
         }
+    }
+    .vdatetime-slot__available {
+      background: forestgreen;
+    }
+    .vdatetime-slot__not-available {
+      background: crimson;
+    }
+    .vdatetime-slot__unknown {
+      background: black;
     }
 </style>
