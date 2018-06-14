@@ -1,7 +1,7 @@
 // Vue
 import Vue from 'vue'
 import moment from 'moment'
-import Datetime from '../../src'
+import Datetime from '../../dist/index.js'
 
 Vue.use(Datetime)
 

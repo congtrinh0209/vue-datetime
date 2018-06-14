@@ -8,8 +8,8 @@
     <title>vue-datetime demo</title>
     <meta name="description" content="vue-datetime docs">
     <meta name="author" content="Mario Juárez">
-    <link rel="stylesheet" href="build/app.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/atom-one-light.min.css">
+    <!-- <link rel="stylesheet" href="build/app.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/atom-one-light.min.css"> -->
 </head>
 
 <body>
@@ -89,7 +89,8 @@
                     monday-first
                     required
             ></datetime>
-
+            
+            <!--  -->
             <div class="values">
                 <p>
                     <strong>Value:</strong> {{ dateEmpty }}
@@ -107,6 +108,43 @@
           input-class=&#x22;my-input-class&#x22;
           wrapper-class=&#x22;my-wrapper-class&#x22;
           :disabled-dates=&#x22;[&#x27;2017-09-07&#x27;, [&#x27;2017-09-25&#x27;, &#x27;2017-10-05&#x27;]]&#x22;
+          :max-date=&#x22;maxDate&#x22;
+          :min-date=&#x22;minDate&#x22;
+          auto-continue
+          auto-close
+          monday-first
+          required&#x3E;&#x3C;/datetime&#x3E;</code></pre>
+        </div>
+        <!-- viet nam datetime -->
+        <h3>vietnam datetime</h3>
+        <datetime
+            v-model="dateEmpty"
+            placeholder="Chọn ngày giờ"
+            input-class="my-input-class"
+            type="datetime"
+            input-format="DD/MM/YYYY | HH:mm"
+            :i18n="{ok:'Chọn', cancel:'Thoát'}"
+            moment-locale="vi"
+            zone="local"
+            :min-date="minDate"
+            monday-first
+            wrapper-class="wrapper-datetime"
+            auto-continue
+            auto-close
+            required
+        ></datetime>
+        <!--  -->
+        <div class="example-code">
+            <pre><code>
+        &#x3C;datetime v-model=&#x22;dateEmpty&#x22;
+          placeholder=&#x22;Chọn ngày giờ&#x22;
+          type=&#x22;datetime&#x22;
+          :i18n=&#x22;{ok:'Chọn', cancel:'Thoát'}&#x22;
+          moment-locale=&#x22;vi&#x22;
+          zone=&#x22;local&#x22;
+          input-format=&#x22;DD/MM/YYYY | HH:mm&#x22;
+          input-class=&#x22;my-input-class&#x22;
+          wrapper-class=&#x22;wrapper-datetime&#x22;
           :max-date=&#x22;maxDate&#x22;
           :min-date=&#x22;minDate&#x22;
           auto-continue
@@ -150,7 +188,7 @@
 </div>
 
 <script src="build/app.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
+<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script> -->
 </body>
 </html>
